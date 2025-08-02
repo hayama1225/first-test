@@ -19,6 +19,12 @@
     </div>
   </header>
 
+  @if (session('status'))
+  <div class="form" style="margin-bottom:12px; color:#0a0;">
+    {{ session('status') }}
+  </div>
+  @endif
+
   <main>
     <div class="contact-form__content">
       <div class="contact-form__heading">
@@ -104,6 +110,8 @@
               <th>種類</th>
               <th>内容</th>
               <th>作成日</th>
+              <th>詳細</th>
+              <th>削除</th>
             </tr>
           </thead>
           <tbody>
@@ -118,6 +126,19 @@
               <td>{{ $c->category?->content }}</td>
               <td>{{ Str::limit($c->detail, 30) }}</td>
               <td>{{ $c->created_at->format('Y-m-d') }}</td>
+              <td>
+                <a href="#" class="detail-btn" data-id="{{ $c->id }}">詳細</a>
+              </td>
+              <td>
+                <form action="{{ route('admin.contacts.destroy', $c) }}" method="POST"
+                  onsubmit="return confirm('ID {{ $c->id }} を削除します。よろしいですか？');">
+                  @csrf
+                  @method('DELETE')
+                  <button type="submit" class="form__button-submit" style="height:auto; padding:6px 10px;">
+                    削除
+                  </button>
+                </form>
+              </td>
             </tr>
             @empty
             <tr>
@@ -126,6 +147,54 @@
             @endforelse
           </tbody>
         </table>
+
+        <!-- ▼モーダル本体（最初は非表示） -->
+        <div id="detailModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4);">
+          <div style="background:#fff; padding:20px; width:60%; margin:50px auto; border-radius:5px; position:relative;">
+            <h3>お問い合わせ詳細</h3>
+            <div id="modalContent">読み込み中...</div>
+            <button id="closeModal" style="margin-top:15px; padding:8px 12px;">閉じる</button>
+          </div>
+        </div>
+
+        <script>
+          document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.detail-btn').forEach(function(btn) {
+              btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const id = this.dataset.id;
+
+                fetch(`/admin/contacts/${id}/json`)
+                  .then(res => res.json())
+                  .then(data => {
+                    let gMap = {
+                      1: '男性',
+                      2: '女性',
+                      3: 'その他'
+                    };
+                    let html = `
+            <p><strong>ID:</strong> ${data.id}</p>
+            <p><strong>氏名:</strong> ${data.last_name} ${data.first_name}</p>
+            <p><strong>性別:</strong> ${gMap[data.gender] ?? data.gender}</p>
+            <p><strong>メール:</strong> ${data.email}</p>
+            <p><strong>電話:</strong> ${data.tel}</p>
+            <p><strong>住所:</strong> ${data.address} ${data.building ?? ''}</p>
+            <p><strong>種類:</strong> ${data.category?.content ?? ''}</p>
+            <p><strong>内容:</strong> ${data.detail}</p>
+            <p><strong>作成日:</strong> ${data.created_at}</p>
+          `;
+                    document.getElementById('modalContent').innerHTML = html;
+                    document.getElementById('detailModal').style.display = 'block';
+                  });
+              });
+            });
+
+            document.getElementById('closeModal').addEventListener('click', function() {
+              document.getElementById('detailModal').style.display = 'none';
+            });
+          });
+        </script>
+
 
         <div style="margin-top:12px;">
           {{ $contacts->withQueryString()->links() }}

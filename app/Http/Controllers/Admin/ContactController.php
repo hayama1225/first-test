@@ -114,4 +114,26 @@ class ContactController extends Controller
 
         return $q;
     }
+
+    public function show(\App\Models\Contact $contact)
+    {
+        $contact->load('category');
+        return view('admin.contacts.show', compact('contact'));
+    }
+
+    public function showJson(\App\Models\Contact $contact)
+    {
+        $contact->load('category');
+        return response()->json($contact);
+    }
+
+    public function destroy(\App\Models\Contact $contact, \Illuminate\Http\Request $request)
+    {
+        $contact->delete();
+
+        // 検索条件を保ったまま一覧へ戻す
+        $q = $request->query(); // ?keyword=... など
+        return redirect()->route('admin.contacts.index', $q)
+            ->with('status', "ID {$contact->id} を削除しました。");
+    }
 }
