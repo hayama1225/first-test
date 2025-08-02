@@ -7,24 +7,21 @@ use Illuminate\Http\Request;
 use App\Models\Contact;
 use App\Models\Category;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Illuminate\Http\RedirectResponse;
 
 class ContactController extends Controller
 {
     public function index(Request $request)
     {
-        // 検索条件を適用して一覧
-        $q = $this->buildQuery($request)->latest();
+        $q = $this->buildQuery($request)
+            ->with('category') // ★ 追加（buildQuery内で既に eager load していても無害）
+            ->latest();
 
-        // ページネーション（検索条件を維持）
-        $contacts = $q->paginate(7);
-        $contacts->appends($request->query()); // ← withQueryString() と同じ効果
+        $contacts = $q->paginate(7)->appends($request->query());
 
         $categories = Category::orderBy('id')->get();
 
-        return view('admin.contacts.index', [
-            'contacts'   => $contacts,
-            'categories' => $categories,
-        ]);
+        return view('admin.contacts.index', compact('contacts', 'categories'));
     }
 
     /**
@@ -32,45 +29,61 @@ class ContactController extends Controller
      */
     public function export(Request $request): StreamedResponse
     {
-        $q = $this->buildQuery($request)->orderBy('id'); // CSVは安定の昇順
+        // 1) 検索条件を反映したクエリを取得
+        $q = $this->buildQuery($request)
+            ->with('category')
+            ->latest();
 
-        $filename = 'contacts_' . now()->format('Ymd_His') . '.csv';
+        $contacts = $q->get();
 
-        return response()->streamDownload(function () use ($q) {
-            $out = fopen('php://output', 'w');
+        // 2) CSVレスポンス生成
+        $response = new StreamedResponse(function () use ($contacts) {
+            $handle = fopen('php://output', 'w');
 
-            // Excel対策: UTF-8 BOM を付与（Shift_JISが必要なら後述の変換に差し替え）
-            fwrite($out, "\xEF\xBB\xBF");
+            // BOM (Excelで文字化け防止)
+            fwrite($handle, chr(0xEF) . chr(0xBB) . chr(0xBF));
 
-            // ヘッダ行
-            fputcsv($out, ['ID', '姓', '名', '性別', 'メール', '電話', '住所', '建物名', '種類', '内容', '作成日']);
+            // ヘッダー行
+            fputcsv($handle, [
+                'ID',
+                '姓',
+                '名',
+                '性別',
+                'メール',
+                '電話',
+                '住所',
+                '建物名',
+                'お問い合わせ種類',
+                '内容',
+                '作成日'
+            ]);
 
-            $mapGender = [1 => '男性', 2 => '女性', 3 => 'その他'];
+            // データ行
+            foreach ($contacts as $c) {
+                $genderMap = [1 => '男性', 2 => '女性', 3 => 'その他'];
+                fputcsv($handle, [
+                    $c->id,
+                    $c->last_name,
+                    $c->first_name,
+                    $genderMap[$c->gender] ?? $c->gender,
+                    $c->email,
+                    $c->tel,
+                    $c->address,
+                    $c->building,
+                    $c->category?->content,
+                    $c->detail,
+                    $c->created_at->format('Y-m-d H:i:s'),
+                ]);
+            }
 
-            // 大量データでも安全に chunk で出力
-            $q->chunk(500, function ($rows) use ($out, $mapGender) {
-                foreach ($rows as $r) {
-                    fputcsv($out, [
-                        $r->id,
-                        $r->last_name,
-                        $r->first_name,
-                        $mapGender[$r->gender] ?? $r->gender,
-                        $r->email,
-                        $r->tel,
-                        $r->address,
-                        $r->building,
-                        optional($r->category)->content,
-                        $r->detail,
-                        optional($r->created_at)?->format('Y-m-d H:i:s'),
-                    ]);
-                }
-            });
+            fclose($handle);
+        });
 
-            fclose($out);
-        }, $filename, [
-            'Content-Type'        => 'text/csv; charset=UTF-8',
-            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
-        ]);
+        // 3) ヘッダー設定
+        $response->headers->set('Content-Type', 'text/csv; charset=UTF-8');
+        $response->headers->set('Content-Disposition', 'attachment; filename="contacts_export.csv"');
+
+        return $response;
     }
 
     /**
@@ -127,13 +140,13 @@ class ContactController extends Controller
         return response()->json($contact);
     }
 
-    public function destroy(\App\Models\Contact $contact, \Illuminate\Http\Request $request)
+    public function destroy(Contact $contact): RedirectResponse
     {
+        // 単純削除（ソフトデリート不要ならこのまま）
         $contact->delete();
 
-        // 検索条件を保ったまま一覧へ戻す
-        $q = $request->query(); // ?keyword=... など
-        return redirect()->route('admin.contacts.index', $q)
-            ->with('status', "ID {$contact->id} を削除しました。");
+        return redirect()
+            ->route('admin.contacts.index')
+            ->with('status', 'お問い合わせを削除しました。');
     }
 }
