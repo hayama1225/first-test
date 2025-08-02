@@ -15,6 +15,9 @@ Route::post('/confirm', [ContactFormController::class, 'confirm'])->name('contac
 Route::post('/thanks',  [ContactFormController::class, 'store'])->name('contacts.store');
 
 // 管理画面（必要なら middleware('auth') を付与）
+// routes/web.php（すでにOK。検索は GET パラメータで同じ index を使います）
 Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('/', [AdminContact::class, 'index'])->name('contacts.index');
+    Route::get('/',        [AdminContact::class, 'index'])->name('contacts.index');
+    Route::get('/export',  [AdminContact::class, 'export'])->name('contacts.export'); // 追加
 });
+
