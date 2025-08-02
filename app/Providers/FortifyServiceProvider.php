@@ -30,14 +30,13 @@ class FortifyServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // ① ログイン画面のBladeを指定
-        Fortify::loginView(function () {
-            return view('auth.login');   // resources/views/auth/login.blade.php
-        });
+        // ログイン画面
+        Fortify::loginView(fn() => view('auth.login'));
 
-        // ② 新規登録画面のBladeを指定
-        Fortify::registerView(function () {
-            return view('auth.register'); // resources/views/auth/register.blade.php
-        });
+        // // ② 新規登録画面のBladeを指定
+        // Fortify::registerView(function () {
+        //     return view('auth.register'); // resources/views/auth/register.blade.php
+        // });
 
         Fortify::createUsersUsing(CreateNewUser::class);
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);

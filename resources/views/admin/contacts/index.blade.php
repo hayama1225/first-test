@@ -142,7 +142,7 @@
             </tr>
             @empty
             <tr>
-              <td colspan="9">データがありません</td>
+              <td colspan="11">データがありません</td>
             </tr>
             @endforelse
           </tbody>
