@@ -12,9 +12,12 @@ Route::post('/thanks',  [ContactFormController::class, 'store'])->name('contacts
 
 // 管理画面（ログイン必須）
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/',                           [AdminContact::class, 'index'])->name('contacts.index');
-    Route::get('/export',                     [AdminContact::class, 'export'])->name('contacts.export');
-    Route::get('/contacts/{contact}',         [AdminContact::class, 'show'])->name('contacts.show');
-    Route::get('/contacts/{contact}/json',    [AdminContact::class, 'showJson'])->name('contacts.showJson');
-    Route::delete('/contacts/{contact}',      [AdminContact::class, 'destroy'])->name('contacts.destroy');
+    Route::get('/',                        [AdminContact::class, 'index'])->name('contacts.index');
+    Route::get('/export',                  [AdminContact::class, 'export'])->name('contacts.export');
+
+    // より「具体的な」パスを先に書く
+    Route::get('/contacts/{contact}/json', [AdminContact::class, 'showJson'])->name('contacts.showJson');
+    Route::get('/contacts/{contact}',      [AdminContact::class, 'show'])->name('contacts.show');
+    Route::delete('/contacts/{contact}',   [AdminContact::class, 'destroy'])->name('contacts.destroy');
+    Route::get('/export', [AdminContact::class, 'export'])->name('contacts.export');
 });

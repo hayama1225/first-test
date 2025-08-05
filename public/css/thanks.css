@@ -1,0 +1,28 @@
+.thanks {
+    min-height: 70vh;
+    display: grid;
+    place-items: center;
+    position: relative;
+    text-align: center;
+}
+
+.thanks__bg {
+    position: absolute;
+    inset: 0;
+    font-size: 22vw;
+    color: rgba(125, 100, 85, .06);
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+    user-select: none;
+}
+
+.thanks__content {
+    position: relative
+}
+
+.thanks__message {
+    font-size: 22px;
+    color: var(--brand);
+    margin-bottom: 16px
+}

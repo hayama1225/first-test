@@ -1,0 +1,28 @@
+/* ページタイトル */
+.contact-title {
+    margin-top: 10px;
+    margin-bottom: 22px;
+    text-align: center
+}
+
+.contact-title h2 {
+    color: var(--brand);
+    font-size: 32px;
+    letter-spacing: .05em
+}
+
+/* ラジオ */
+.radio-list {
+    display: flex;
+    gap: 22px;
+    align-items: center
+}
+
+.radio-list input {
+    margin-right: 6px
+}
+
+/* セレクトの幅など */
+.form__group-content select {
+    max-width: 360px
+}

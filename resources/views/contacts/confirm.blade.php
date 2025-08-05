@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Confirm</title>
     <link rel="stylesheet" href="{{ asset('css/sanitize.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/common.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/index.css') }}" />
 </head>
 
@@ -46,7 +47,7 @@
                     @endforeach
                     <div class="form__button" style="display:flex; gap:12px;">
                         <button class="form__button-submit" type="submit">送信</button>
-                        <button class="form__button-submit" type="button" onclick="history.back()">修正する</button>
+                        <button class="form__button-submit" type="button" onclick="history.back()">修正</button>
                     </div>
                 </form>
             </div>

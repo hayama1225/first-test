@@ -1,0 +1,34 @@
+.auth-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center
+}
+
+.auth__wrap {
+    max-width: 720px;
+    margin: 26px auto
+}
+
+.auth__card {
+    padding: 28px;
+    border-radius: 8px
+}
+
+.auth__title {
+    text-align: center;
+    color: var(--brand);
+    font-size: 36px;
+    margin: 14px 0 18px
+}
+
+.auth__actions {
+    text-align: center;
+    margin-top: 10px
+}
+
+.auth__link {
+    color: #b08d76;
+    border: 1px solid #e4d8cf;
+    padding: 6px 10px;
+    border-radius: 4px
+}
