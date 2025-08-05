@@ -1,8 +1,12 @@
-# Contact Form (COACHTECH 課題)
+# お問い合わせフォーム (COACHTECH 課題)
 
 FashionablyLate テーマのシンプルなお問い合わせアプリです。
 Fortify による認証、問い合わせ入力→確認→サンキュー、管理画面（検索・フィルタ・CSVエクスポート・モーダル詳細・削除・7件/頁）を実装しています。
 ※おおよそ課題条件に寄せているつもりですが、完全ではありません。
+ログイン: /login・ユーザー登録: /registerが消えてしまったようです。
+
+1. https://github.com/hayama1225/first-test.git
+2 .docker-compose up -d --build
 
 ---
 
@@ -30,14 +34,9 @@ docker compose exec php composer install
 # 3) アプリキー発行
 docker compose exec php php artisan key:generate
 
-# 4) .env のDB接続を docker-compose の設定に合わせて確認/修正
-#    例）DB_HOST=mysql / DB_PORT=3306 / DB_DATABASE=laravel / DB_USERNAME=sail / DB_PASSWORD=password
-
 # 5) マイグレーション + 初期データ（カテゴリ5件・コンタクト35件）
 docker compose exec php php artisan migrate --seed
 
-# 6) ストレージ（必要に応じて）
-docker compose exec php php artisan storage:link
 
 ```
 
