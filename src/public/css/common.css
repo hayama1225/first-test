@@ -1,0 +1,295 @@
+:root {
+    --brand: #7a6253;
+    /* 文字・見出しの主色（茶） */
+    --brand-weak: #c8b4a3;
+    /* 薄い茶 */
+    --bg: #f6f1eb;
+    /* ページ背景（生成り） */
+    --panel: #ffffff;
+    --text: #3d3d3d;
+    --muted: #9a8f86;
+    --line: #eee3da;
+    --input: #f4f1ef;
+}
+
+html,
+body {
+    height: 100%
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+        "Hiragino Kaku Gothic ProN", "Noto Sans JP", "メイリオ", sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.7;
+}
+
+a {
+    color: var(--brand);
+    text-decoration: none
+}
+
+a:hover {
+    opacity: .9
+}
+
+.header {
+    border-bottom: 1px solid var(--line);
+    background: #fff
+}
+
+.header__inner {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 16px
+}
+
+.header__logo {
+    font-weight: 700;
+    color: var(--brand);
+    letter-spacing: .08em
+}
+
+.container {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 0 16px
+}
+
+.page-title {
+    text-align: center;
+    color: var(--brand);
+    font-size: 38px;
+    letter-spacing: .06em;
+    margin: 28px 0 24px;
+}
+
+.card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .03);
+}
+
+/* form */
+.form {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 24px
+}
+
+.form__group {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    margin: 14px 0
+}
+
+.form__group-title {
+    width: 220px;
+    text-align: right;
+    color: var(--brand);
+    padding-top: 10px
+}
+
+.form__label--item {
+    font-weight: 600
+}
+
+.form__group-content {
+    flex: 1
+}
+
+.form__input--text input,
+.form__group-content input[type="text"],
+.form__group-content input[type="email"],
+.form__group-content input[type="date"],
+.form__group-content input[type="password"],
+.form__group-content select,
+.form__group-content textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: var(--input);
+}
+
+.form__group-content textarea {
+    min-height: 140px
+}
+
+.input-inline {
+    display: flex;
+    gap: 12px;
+    align-items: center
+}
+
+.input-inline input {
+    flex: 1
+}
+
+.help {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 6px
+}
+
+/* buttons */
+.btn {
+    display: inline-block;
+    padding: 12px 20px;
+    border-radius: 4px;
+    border: 0;
+    cursor: pointer
+}
+
+.btn--primary {
+    background: var(--brand);
+    color: #fff
+}
+
+.btn--ghost {
+    background: #fff;
+    color: var(--brand);
+    border: 1px solid var(--brand)
+}
+
+.btn--weak {
+    background: var(--brand-weak);
+    color: #fff
+}
+
+.btn:disabled {
+    opacity: .6;
+    cursor: not-allowed
+}
+
+/* table (admin) */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff
+}
+
+.table th,
+.table td {
+    border: 1px solid var(--line);
+    padding: 12px 12px;
+    font-size: 14px
+}
+
+.table th {
+    background: #efe6df;
+    color: var(--brand);
+    text-align: left;
+    letter-spacing: .03em
+}
+
+.table tbody tr:nth-child(odd) {
+    background: #fff
+}
+
+.table tbody tr:nth-child(even) {
+    background: #faf7f5
+}
+
+/* pagination (Laravel links) */
+.pagination {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    justify-content: center;
+    margin: 16px 0
+}
+
+.pagination .page-link,
+.pagination span {
+    display: inline-block;
+    padding: 6px 10px;
+    border: 1px solid var(--line);
+    background: #fff;
+    border-radius: 4px;
+}
+
+.pagination .active span {
+    background: var(--brand);
+    color: #fff;
+    border-color: var(--brand)
+}
+
+/* flash */
+.alert {
+    padding: 12px 14px;
+    border-radius: 4px;
+    margin: 12px 0
+}
+
+.alert-success {
+    background: #e8f5e9;
+    color: #2e7d32
+}
+
+/* modal (admin 詳細) */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .4);
+    z-index: 50
+}
+
+.modal__panel {
+    position: relative;
+    width: min(760px, 90%);
+    margin: 60px auto;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 28px 28px 22px;
+}
+
+.modal__close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: #fff;
+    display: grid;
+    place-items: center;
+    cursor: pointer
+}
+
+.modal__title {
+    font-size: 22px;
+    color: var(--brand);
+    margin-bottom: 10px
+}
+
+.modal__actions {
+    margin-top: 16px
+}
+
+.w-100 {
+    width: 100%
+}
+
+.text-center {
+    text-align: center
+}
+
+.mb-8 {
+    margin-bottom: 8px
+}
+
+.mb-16 {
+    margin-bottom: 16px
+}
+
+.mb-24 {
+    margin-bottom: 24px
+}

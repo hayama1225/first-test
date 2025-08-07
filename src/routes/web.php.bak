@@ -1,0 +1,32 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+
+use Illuminate\Http\Request;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
+
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('/_validation-test', function (Request $request) {
+    // わざとエラーを出す
+    $request->validate([
+        'email' => 'required|email|max:5',
+        'password' => 'required|min:8|confirmed',
+    ]);
+    return 'ok';
+});
+<?php
+use Illuminate\Support\Facades\Route;
+Route::get("/_i18n-check", fn() => __("validation.required", ["attribute" => "メールアドレス"]));

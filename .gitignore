@@ -1,0 +1,5 @@
+/docker/mysql/data/
+/vendor/
+/node_modules/
+/.env
+

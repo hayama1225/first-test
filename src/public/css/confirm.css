@@ -1,0 +1,43 @@
+.confirm-wrap {
+    max-width: 960px;
+    margin: 0 auto
+}
+
+.confirm-title {
+    text-align: center;
+    color: var(--brand);
+    font-size: 32px;
+    margin: 18px 0
+}
+
+.confirm-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border: 1px solid var(--line)
+}
+
+.confirm-table th,
+.confirm-table td {
+    border: 1px solid var(--line);
+    padding: 16px;
+}
+
+.confirm-table th {
+    background: #bda795;
+    color: #fff;
+    width: 260px;
+    font-weight: 600;
+    letter-spacing: .03em;
+}
+
+.confirm-actions {
+    text-align: center;
+    margin-top: 18px
+}
+
+.confirm-actions .btn {
+    min-width: 160px;
+    margin: 0 10px
+}
+
